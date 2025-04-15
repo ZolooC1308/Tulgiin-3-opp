@@ -1,2 +1,2 @@
-# Tulgiin-3-opp
+# Tulgiin-3-oop
 opp -ын даалгавар дээр хэрэгжүүлэлтүүдээ энд commit хийх.
