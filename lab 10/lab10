@@ -1,0 +1,92 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <cmath>
+#include "LinkedList.h"
+
+using namespace std;
+
+class Shape {
+protected:
+    string name;
+public:
+    Shape(string n) : name(n) {}
+    virtual double getArea() = 0;
+    virtual void display() = 0;
+    virtual ~Shape() {}
+};
+
+class TwoDShape : public Shape {
+protected:
+    double x, y;
+public:
+    TwoDShape(string n, double xPos, double yPos) : Shape(n), x(xPos), y(yPos) {}
+};
+
+class Circle : public TwoDShape {
+private:
+    double radius;
+public:
+    Circle(double x, double y, double r) : TwoDShape("Circle", x, y), radius(r) {}
+    double getArea() override {
+        return 3.14159 * radius * radius;
+    }
+    void display() override {
+        cout << name << " at (" << x << ", " << y << ") with radius " << radius << endl;
+        cout << "Area: " << getArea() << endl;
+    }
+};
+
+class Square : public TwoDShape {
+private:
+    double side;
+public:
+    Square(double x, double y, double s) : TwoDShape("Square", x, y), side(s) {}
+    double getArea() override {
+        return side * side;
+    }
+    void display() override {
+        cout << name << " at (" << x << ", " << y << ") with side " << side << endl;
+        cout << "Area: " << getArea() << endl;
+    }
+};
+
+class Triangle : public TwoDShape {
+private:
+    double side;
+public:
+    Triangle(double x, double y, double s) : TwoDShape("Triangle", x, y), side(s) {}
+    double getArea() override {
+        return (std::sqrt(3) / 4) * side * side;
+    }
+    void display() override {
+        cout << name << " at (" << x << ", " << y << ") with side " << side << endl;
+        cout << "Area: " << getArea() << endl;
+    }
+};
+
+
+int main() {
+    srand(time(0));
+    LinkedList<TwoDShape*> shapes; // shapes - jagsaalt
+
+    int numShapes = 20 + rand() % 11; // 20 - 30 хооронд санамсаргүй дүрс авна.
+    for (int i = 0; i < numShapes; i++) {
+        int type = rand() % 3; 
+        double x = rand() % 100, y = rand() % 100;  // x,y координатууд рандом утга оноох
+        double size = 1 + rand() % 10; // size, radius
+        if (type == 0) shapes.add(new Circle(x, y, size)); // Хүснэгтэнд тойрог үүсгэж нэмэх 
+        else if (type == 1) shapes.add(new Square(x, y, size)); // Хүснэгтэнд дөрвөлжин үүсгэж нэмэх
+        else shapes.add(new Triangle(x, y, size)); // Хүснэгтэнд гурвалжин үүсгэж нэмэх
+    }
+
+    cout << "Before sorting:\n";
+    shapes.displayAll();
+
+    shapes.sortByArea();
+
+    cout << "\nAfter sorting by area:\n";
+    shapes.displayAll();
+
+    return 0;
+}
